@@ -8,6 +8,9 @@ import {RESOLUTION} from "../../Enum/EnvironmentVariable";
 import {SoundMeter} from "../Components/SoundMeter";
 import {SoundMeterSprite} from "../Components/SoundMeterSprite";
 import {HtmlUtils} from "../../WebRtc/HtmlUtils";
+//import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
+import VirtualJoystick from 'phaser3-rex-plugins/plugins/virtualjoystick.js';
+
 
 export const EnableCameraSceneName = "EnableCameraScene";
 enum LoginTextures {
@@ -55,7 +58,7 @@ export class EnableCameraScene extends Phaser.Scene {
     create() {
         this.textField = new TextField(this, this.game.renderer.width / 2, 20, 'Turn on your camera and microphone');
 
-        this.pressReturnField = new TextField(this, this.game.renderer.width / 2, this.game.renderer.height - 30, 'Press enter to start');
+        this.pressReturnField = new TextField(this, this.game.renderer.width / 2, this.game.renderer.height - 30, 'Press enter to start').setInteractive().on('pointerdown', this.login, this);
 
         this.cameraNameField = new TextField(this, this.game.renderer.width / 2, this.game.renderer.height - 60, '');
 
@@ -111,6 +114,23 @@ export class EnableCameraScene extends Phaser.Scene {
 
         this.repositionCallback = this.reposition.bind(this);
         window.addEventListener('resize', this.repositionCallback);
+
+       //const virtualJoystick = new VirtualJoystickPlugin(this, {
+       const virtualJoystick = new VirtualJoystick(this, {
+       ////const joyStick = this.scene.plugins.get('rexVirtualJoystick').addPlayer(this.scene, {
+          x: 120,
+          y: 20,
+          radius: 120,
+          base: this.add.circle(0, 0, 120, 0x888888),
+          thumb: this.add.circle(0, 0, 10, 0xcccccc),
+          //enable: true,
+          //dir: "8dir",
+       });
+console.log('vmx: enable camara scene: virtualkeyboard6:', virtualJoystick);
+       virtualJoystick.on("update", () => {
+       //}).on("update", () => {
+          console.log('vmx: enable camera scene: virtualjoystick: on update5')
+       });
     }
 
     private previousCam(): void {

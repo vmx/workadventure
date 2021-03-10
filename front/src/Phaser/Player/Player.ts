@@ -32,7 +32,7 @@ export class Player extends Character implements CurrentGamerInterface {
 
     moveUser(delta: number): void {
         //if user client on shift, camera and player speed
-        let direction = null;
+        let direction: string | null = null;
         let moving = false;
 
         const activeEvents = this.userInputManager.getEventListForGameTick();

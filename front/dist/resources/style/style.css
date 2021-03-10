@@ -554,6 +554,7 @@ input[type=range]:focus::-ms-fill-upper {
     position: absolute;
     width: 100%;
     height: 100%;
+    pointer-events: none;
     /* TODO: DO WE NEED FLEX HERE???? WE WANT A SIDEBAR OF EXACTLY 25% (note: flex useful for direction!!!) */
 }
 
@@ -563,6 +564,10 @@ input[type=range]:focus::-ms-fill-upper {
 
 .game-overlay video {
     width: 100%
+}
+/* Let events through the overlay (so that the touch input works), but make them work on the actual elements */
+.game-overlay > div > div {
+    pointer-events: auto;
 }
 
 .main-section {

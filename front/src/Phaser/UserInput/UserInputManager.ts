@@ -1,7 +1,7 @@
-import {GameScene} from "../Game/GameScene";
+import {GameScene, JoystickKey} from "../Game/GameScene";
 
 interface UserInputManagerDatum {
-    keyInstance: Phaser.Input.Keyboard.Key;
+    keyInstance: Phaser.Input.Keyboard.Key | JoystickKey;
     event: UserInputEvent
 }
 
@@ -38,6 +38,7 @@ export class UserInputManager {
     }
 
     initKeyBoardEvent(){
+        const joystickKeys = this.Scene.virtualJoystick.createCursorKeys();
         this.KeysCode = [
             {event: UserInputEvent.MoveUp, keyInstance: this.Scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z, false) },
             {event: UserInputEvent.MoveUp, keyInstance: this.Scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false) },
@@ -56,6 +57,11 @@ export class UserInputManager {
             {event: UserInputEvent.Interact, keyInstance: this.Scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E, false) },
             {event: UserInputEvent.Interact, keyInstance: this.Scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false) },
             {event: UserInputEvent.Shout, keyInstance: this.Scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F, false) },
+
+            {event: UserInputEvent.MoveUp, keyInstance: joystickKeys.up },
+            {event: UserInputEvent.MoveLeft, keyInstance: joystickKeys.left },
+            {event: UserInputEvent.MoveDown, keyInstance: joystickKeys.down },
+            {event: UserInputEvent.MoveRight, keyInstance: joystickKeys.right },
         ];
     }
 

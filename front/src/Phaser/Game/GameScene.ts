@@ -72,6 +72,8 @@ import {TextureError} from "../../Exception/TextureError";
 import {addLoader} from "../Components/Loader";
 import {ErrorSceneName} from "../Reconnecting/ErrorScene";
 import {localUserStore} from "../../Connexion/LocalUserStore";
+//import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
+import VirtualJoystick from 'phaser3-rex-plugins/plugins/virtualjoystick.js';
 
 export interface GameSceneInitInterface {
     initPosition: PointInterface|null,
@@ -107,6 +109,29 @@ interface DeleteGroupEventInterface {
     type: 'DeleteGroupEvent'
     groupId: number
 }
+
+//import Phaser from "phaser";
+//
+export type JoystickKey = {
+    isDown: boolean
+}
+
+type Direction =  'left' | 'right' | 'up' | 'down'
+
+interface JoystickKeys extends Record<Direction, JoystickKey> {
+    left: JoystickKey;
+    right: JoystickKey;
+    up: JoystickKey;
+    down: JoystickKey;
+}
+
+interface VirtualJoystickInterface extends Phaser.GameObjects.GameObject {
+    y: number;
+    x: number;
+    visible: boolean;
+    createCursorKeys: () => JoystickKeys
+}
+
 
 const defaultStartLayerName = 'start';
 
@@ -162,6 +187,7 @@ export class GameScene extends ResizableScene implements CenterListener {
     private openChatIcon!: OpenChatIcon;
     private playerName!: string;
     private characterLayers!: string[];
+    public virtualJoystick!: VirtualJoystickInterface;
 
     constructor(private room: Room, MapUrlFile: string, customKey?: string|undefined) {
         super({
@@ -376,6 +402,48 @@ export class GameScene extends ResizableScene implements CenterListener {
 
         this.initStartXAndStartY();
 
+        this.virtualJoystick = new VirtualJoystick(this, {
+        ////const joyStick = this.scene.plugins.get('rexVirtualJoystick').addPlayer(this.scene, {
+           //x: 120,
+           //y: 20,
+            x: this.game.renderer.width / 2,
+            y: this.game.renderer.height / 2,
+           radius: 20,
+           base: this.add.circle(0, 0, 20, 0x888888),
+           thumb: this.add.circle(0, 0, 10, 0xcccccc),
+           enable: true,
+           dir: "8dir",
+        //});
+        //virtualJoystick.on("update", () => {
+        })
+        
+        const cursorKeys = this.virtualJoystick.createCursorKeys();
+        this.virtualJoystick.on("update", () => {
+           //console.log('vmx: gamescene: virtualjoystick: on update14')
+            console.log('vmx: gamescene: cursorkeys: var cursorKeys = joystick.createCursorKeys();', cursorKeys.up.isDown, cursorKeys.right.isDown, cursorKeys.down.isDown, cursorKeys.left.isDown);
+            //console.log('vmx: gamescene: joystick: nokey, uo, right, down, left', virtualJoystick.noKey, virtualJoystick.up, virtualJoystick.right, virtualJoystick.down, virtualJoystick.left);
+            //for (const key of cursorKeys) {
+            //    switch (
+            //}
+            //for (const name in cursorKeys) {
+            //   const key = cursorKeys[name as Direction];
+            //   switch (name) {
+            //   case "up":
+            //       //this.joystickEvents.set(UserInputEvent.MoveUp, key.isDown);
+            //       break;
+            //   case "left":
+            //       //this.joystickEvents.set(UserInputEvent.MoveLeft, key.isDown);
+            //       break;
+            //   case "down":
+            //       //this.joystickEvents.set(UserInputEvent.MoveDown, key.isDown);
+            //       break;
+            //   case "right":
+            //       //this.joystickEvents.set(UserInputEvent.MoveRight, key.isDown);
+            //       break;
+            //   }
+            //}
+        });
+
         //add entities
         this.Objects = new Array<Phaser.Physics.Arcade.Sprite>();
 
@@ -572,6 +640,7 @@ export class GameScene extends ResizableScene implements CenterListener {
 
             return this.connection;
         });
+
     }
 
     //todo: into dedicated classes
